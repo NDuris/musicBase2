@@ -6,6 +6,8 @@ import * as sqlQueries from './sqlQueries.js';
 const app = express();
 const port = process.env.PORT || 3334;
 
+app.listen(port);
+
 app.use(express.json());
 app.use(cors());
 
