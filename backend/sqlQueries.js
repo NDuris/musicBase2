@@ -83,3 +83,63 @@ export const updateAlbum = (id, name) => {
 export const deleteAlbum = (id) => {
     return 'DELETE FROM Albums WHERE AlbumID = ?;';
 };
+
+export const getAlbumInfo = (albumId) => {
+    return `
+        SELECT
+        Albums.AlbumID,
+        Albums.AlbumName,
+        Artists.ArtistName AS AlbumArtist
+        FROM
+        Albums
+        JOIN AlbumArtists ON Albums.AlbumID = AlbumArtists.AlbumID
+        JOIN Artists ON AlbumArtists.ArtistID = Artists.ArtistID
+        WHERE
+        Albums.AlbumID = ?;
+    `;
+};
+
+export const getAlbumTracks = (albumId) => {
+    return `
+        SELECT
+        Tracks.TrackName,
+        Artists.ArtistName AS TrackArtist
+        FROM
+        AlbumTracks
+        JOIN Tracks ON AlbumTracks.TrackID = Tracks.TrackID
+        LEFT JOIN TrackArtists ON Tracks.TrackID = TrackArtists.TrackID
+        LEFT JOIN Artists ON TrackArtists.ArtistID = Artists.ArtistID
+        WHERE
+        AlbumTracks.AlbumID = ?;
+    `;
+};
+
+export const getAlbumArtists = (albumId) => {
+    return 'SELECT a.* FROM Artists a JOIN AlbumArtists aa ON a.ArtistID = aa.ArtistID WHERE aa.AlbumID = ?';
+};
+
+
+export const searchArtists = (searchTerm) => {
+    `SELECT * FROM Artists
+      WHERE ArtistName LIKE '%${searchTerm}%';
+      `};
+
+export const searchAlbums = (searchTerm) => {
+    `
+      SELECT Albums.AlbumName, Artists.ArtistName, Albums.NumSongs, Albums.AlbumID, Artists.ArtistID
+      FROM Albums
+      JOIN AlbumArtists ON Albums.AlbumID = AlbumArtists.AlbumID
+      JOIN Artists ON AlbumArtists.ArtistID = Artists.ArtistID
+      WHERE Albums.AlbumName LIKE '%${searchTerm}%' OR Artists.ArtistName LIKE '%${searchTerm}%';
+    `};
+
+export const searchTracks = (searchTerm) => {
+    `
+      SELECT Tracks.TrackName, Artists.ArtistName, Albums.AlbumName, Artists.ArtistID, Albums.AlbumID
+      FROM Tracks
+      LEFT JOIN TrackArtists ON Tracks.TrackID = TrackArtists.TrackID
+      LEFT JOIN Artists ON TrackArtists.ArtistID = Artists.ArtistID
+      LEFT JOIN AlbumTracks ON Tracks.TrackID = AlbumTracks.TrackID
+      LEFT JOIN Albums ON AlbumTracks.AlbumID = Albums.AlbumID
+      WHERE Tracks.TrackName LIKE '%${searchTerm}%' OR Albums.AlbumName LIKE '%${searchTerm}%' OR Artists.ArtistName LIKE '%${searchTerm}%';
+    `};
