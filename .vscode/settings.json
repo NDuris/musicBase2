@@ -1,8 +1,4 @@
 {
   "appService.defaultWebAppToDeploy": "/subscriptions/1f286249-198a-4186-a641-93ef0cb24f2c/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/MusicBased",
   "appService.deploySubpath": "backend",
-  "appService.zipIgnorePattern": [
-    "node_modules{,/**}",
-    ".vscode{,/**}"
-  ]
 }
